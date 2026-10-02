@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="A self-guided pilgrimage through seven temples in Bangkok, on foot and by public transit." />
+<meta name="description" content="Thoughtful self-guided journeys through temples, towns, trails and local places across Thailand and beyond." />
 <meta name="theme-color" content="#F5F3EC" />
-<title>Seven Temples, One Day — Bangkok Temple Quest</title>
+<title>Travel Slowly — Field Notes for Curious Places</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2315130F'/%3E%3Ctext x='50' y='69' font-size='58' text-anchor='middle' fill='%23F5F3EC' font-family='Georgia,serif'%3E%E0%B8%A7%3C/text%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,6 +82,7 @@ html.lang-th [data-th]{display:inline}
 /* map */
 .map-frame{height:520px;border:1px solid var(--line)}
 #map{height:100%}
+.trip-sec{scroll-margin-top:130px}
 .leaflet-popup-content-wrapper{background:var(--ink);color:var(--paper);border-radius:2px}
 .leaflet-popup-tip{background:var(--ink)}
 .leaflet-control-zoom a{background:var(--paper)!important;color:var(--ink)!important;border-color:var(--line)!important}
@@ -126,18 +127,20 @@ html.lang-th [data-th]{display:inline}
 .stat-cell{padding:0 22px;border-left:1px solid var(--line)}
 .stat-cell:first-child{border-left:0;padding-left:0}
 .big-close{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(2.6rem,7vw,6rem);line-height:.98;letter-spacing:-.02em}
-/* trip tabs */
-.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:transparent;color:var(--stone);cursor:pointer;transition:.2s;white-space:nowrap}
-.tab:hover{border-color:var(--ink);color:var(--ink)}
-.tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+ /* trip tabs: keep the route switcher in the original top navigation */
+  .tabs{display:flex;gap:8px;scrollbar-width:none;overflow-x:auto}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--paper);color:var(--stone);cursor:pointer;transition:.2s;white-space:nowrap}
+  .tab:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-2px)}
+  .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  @media(max-width:640px){.nav #tabs{overflow-x:auto;padding:0 16px 12px}.tab{padding:7px 11px;font-size:10px}}
 .day-h{display:flex;align-items:baseline;gap:16px;margin-top:56px;margin-bottom:8px}
 .day-h .mono{color:var(--ember);font-size:12px;letter-spacing:.14em}
 #tripMap{height:100%}
 .ph{aspect-ratio:4/5;border:1px solid var(--ink);background:var(--paper-deep);display:grid;place-items:center;text-align:center;padding:20px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--stone)}
 .trip-hero{height:44vh;background:var(--paper-deep);overflow:hidden}@media(min-width:768px){.trip-hero{height:56vh}}
 .trip-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.closing-note{margin:18px 0 22px;padding-left:14px;border-left:2px solid var(--ember);font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7;color:var(--stone)}
 </style>
 </head>
 <body>
@@ -146,7 +149,7 @@ html.lang-th [data-th]{display:inline}
 
 <nav class="nav">
   <div class="container flex items-center justify-between py-4">
-    <a href="#home" class="disp font-semibold text-sm tracking-tight">Temple Quest <span class="mono text-[var(--ember)] text-xs align-top">'26</span></a>
+    <a href="#home" class="disp font-semibold text-sm tracking-tight">Travel Slowly <span class="mono text-[var(--ember)] text-xs align-top">'26</span></a>
     <div id="bkkLinks" class="hidden md:flex items-center gap-8">
       <a href="#route" class="underline-hover"><span data-en>Route</span><span data-th>เส้นทาง</span></a>
       <a href="#map-section" class="underline-hover"><span data-en>Map</span><span data-th>แผนที่</span></a>
@@ -155,6 +158,7 @@ html.lang-th [data-th]{display:inline}
       <a href="#guide" class="underline-hover"><span data-en>Guide</span><span data-th>คู่มือ</span></a>
       <a href="#checklist" class="underline-hover"><span data-en>Checklist</span><span data-th>เช็คลิสต์</span></a>
     </div>
+    <div id="tripLinks" class="hidden md:flex items-center gap-8" style="display:none"><a href="#tripTop" class="underline-hover"><span data-en>Route</span><span data-th>เส้นทาง</span></a><a href="#tripSchedule" class="underline-hover"><span data-en>Schedule</span><span data-th>กำหนดการ</span></a><a href="#tripMapSec" class="underline-hover"><span data-en>Map</span><span data-th>แผนที่</span></a><a href="#tripPlaces" class="underline-hover"><span data-en>Places</span><span data-th>สถานที่</span></a><a href="#tripGuide" class="underline-hover"><span data-en>Guide</span><span data-th>คู่มือ</span></a><a href="#tripCheck" class="underline-hover"><span data-en>Checklist</span><span data-th>เช็คลิสต์</span></a></div>
     <button id="langBtn" class="lang-btn" aria-label="Switch language">ไทย</button>
   </div>
 <div id="tabs" class="tabs container"></div>
@@ -166,9 +170,9 @@ html.lang-th [data-th]{display:inline}
 <section id="home" class="pt-40 pb-0">
   <div class="container">
     <p class="eyebrow reveal"><span data-en>Sat · 05 Sep 2026 · Bangkok, Thailand</span><span data-th>เสาร์ · 5 ก.ย. 2569 · กรุงเทพฯ ประเทศไทย</span></p>
-    <h1 class="hl-1 disp mt-6 reveal"><span data-en>Seven Temples,<br>One Day.</span><span data-th class="thai">เจ็ดวัด<br>ในหนึ่งวัน</span></h1>
-    <p class="thai text-[var(--stone)] text-base md:text-lg mt-4 reveal"><span data-en>เจ็ดวัดมงคล ในหนึ่งวัน — เดินทางด้วยรถสาธารณะ</span><span data-th>Seven Temples, One Day — by public transit</span></p>
-    <p class="mt-6 max-w-lg text-[15px] leading-relaxed text-[var(--ink)]/80 reveal"><span data-en>A self-guided pilgrimage through Bangkok's old city — on foot, by ferry, and by rail. No bookings, no guide, just a considered route and seven places worth slowing down for.</span><span data-th class="thai">ทริปแสวงบุญด้วยตัวเองผ่านเมืองเก่ากรุงเทพฯ — เดินเท้า นั่งเรือ และรถไฟฟ้า ไม่ต้องจอง ไม่ต้องมีไกด์ มีเพียงเส้นทางที่คิดมาอย่างดี และเจ็ดสถานที่ที่ควรค่าแก่การหยุดพัก</span></p>
+<h1 class="hl-1 disp mt-6 reveal"><span data-en>Places Worth<br>Slowing Down For.</span><span data-th class="thai">สถานที่ที่ควรค่า<br>แก่การเดินทางช้า ๆ</span></h1>
+    <p class="thai text-[var(--stone)] text-base md:text-lg mt-4 reveal"><span data-en>วัด เมือง ป่า น้ำตก และทางเล็ก ๆ — เดินทางอย่างตั้งใจ</span><span data-th>Temples, towns, trails and small roads — travel with intention</span></p>
+    <p class="mt-6 max-w-lg text-[15px] leading-relaxed text-[var(--ink)]/80 reveal"><span data-en>Self-guided journeys through places with a story — temples, towns, trails and local corners. No rush, no checklist pressure, just a considered route and room to notice what is usually missed.</span><span data-th class="thai">บันทึกการเดินทางด้วยตัวเองผ่านสถานที่ที่มีเรื่องราว — วัด เมือง เส้นทางธรรมชาติ และมุมท้องถิ่น ไม่ต้องรีบ ไม่ต้องทำตามเช็คลิสต์ เพียงเส้นทางที่คิดมาอย่างดี และเวลาสำหรับสังเกตสิ่งที่มักถูกมองข้าม</span></p>
     <div class="flex gap-8 mt-8 reveal">
       <a href="#route" class="underline-hover mono text-xs tracking-widest uppercase"><span data-en>The Route ↓</span><span data-th class="thai" style="text-transform:none">ดูเส้นทาง ↓</span></a>
       <a href="#map-section" class="underline-hover mono text-xs tracking-widest uppercase"><span data-en>The Map ↗</span><span data-th class="thai" style="text-transform:none">ดูแผนที่ ↗</span></a>
@@ -270,11 +274,11 @@ html.lang-th [data-th]{display:inline}
 
 <footer class="section pb-16">
   <div class="container">
-    <p class="thai text-[var(--stone)] reveal"><span data-en>เดินช้า ๆ มองให้ลึก</span><span data-th>Walk slowly. Look deeply.</span></p>
-    <h2 class="big-close mt-3 reveal"><span data-en>Walk slowly.<br>Look deeply.</span><span data-th class="thai">เดินช้า ๆ<br>มองให้ลึก</span></h2>
+<p id="footEyebrow" class="thai text-[var(--stone)] reveal"><span data-en>ออกไปให้ไกล มองให้ลึก</span><span data-th>Go somewhere. Look deeply.</span></p>
+    <h2 id="footClose" class="big-close mt-3 reveal"><span data-en>Go somewhere.<br>Look deeply.</span><span data-th class="thai">ออกไปให้ไกล<br>มองให้ลึก</span></h2>
     <div class="hairline mt-16 pt-8 flex flex-wrap justify-between gap-4">
-      <p class="mono text-xs text-[var(--stone)]">© 2026 Bangkok Temple Quest</p>
-      <p class="mono text-xs text-[var(--stone)]"><span data-en>A self-guided pilgrimage. No bookings required.</span><span data-th class="thai" style="text-transform:none">ทริปแสวงบุญด้วยตัวเอง ไม่ต้องจองล่วงหน้า</span></p>
+<p class="mono text-xs text-[var(--stone)]">© 2026 Travel Slowly</p>
+      <p class="mono text-xs text-[var(--stone)]"><span data-en>Self-guided journeys for curious people.</span><span data-th class="thai" style="text-transform:none">บันทึกการเดินทางสำหรับคนช่างสังเกต</span></p>
     </div>
   </div>
 </footer>
@@ -290,43 +294,43 @@ const temples=[
   famous:{en:'Emerald Buddha & glittering mosaics',th:'พระแก้วมรกตและสถาปัตยกรรมวิจิตร'},
   prayer:{en:'Merit, clarity and fresh beginnings',th:'เสริมสิริมงคลและความชัดเจน'},
   spot:{en:'The gilded guardians at the eastern gate',th:'ยักษ์ทวารบาลและเจดีย์ทอง'},
-  hours:'08:30–15:30',duration:{en:'45–60 min',th:'45–60 นาที'},travel:{en:'Walk 12 min from MRT Sanam Chai',th:'เดิน 12 นาทีจาก MRT สนามไชย'}},
+  closing:{en:'Begin with stillness, before the city begins to glitter.',th:'เริ่มต้นด้วยความสงบ ก่อนเมืองจะเปล่งประกาย'},hours:'08:30–15:30',duration:{en:'45–60 min',th:'45–60 นาที'},travel:{en:'Walk 12 min from MRT Sanam Chai',th:'เดิน 12 นาทีจาก MRT สนามไชย'}},
  {n:'Wat Pho',thai:'วัดโพธิ์',lat:13.7465,lng:100.4930,img:'https://commons.wikimedia.org/wiki/Special:FilePath/Wat%20Pho%20Bangkok%20Thailand.jpg?width=1200',
   history:{en:'Bangkok\u2019s great school of traditional medicine, and home to a reclining Buddha of extraordinary scale.',th:'วัดสำคัญแห่งการแพทย์แผนไทย โดดเด่นด้วยพระพุทธไสยาสน์ขนาดมหึมา'},
   famous:{en:'46m Reclining Buddha',th:'พระพุทธไสยาสน์ 46 เมตร'},
   prayer:{en:'Wellness and peaceful rest',th:'สุขภาพและความสงบ'},
   spot:{en:'The mother-of-pearl feet detail',th:'ลวดลายมุกใต้พระบาท'},
-  hours:'08:00–18:30',duration:{en:'40 min',th:'40 นาที'},travel:{en:'8 min walk from Wat Phra Kaew',th:'เดิน 8 นาทีจากวัดพระแก้ว'}},
+  closing:{en:'Let the quiet details do the talking.',th:'ปล่อยให้รายละเอียดเล็ก ๆ เป็นผู้เล่าเรื่อง'},hours:'08:00–18:30',duration:{en:'40 min',th:'40 นาที'},travel:{en:'8 min walk from Wat Phra Kaew',th:'เดิน 8 นาทีจากวัดพระแก้ว'}},
  {n:'Wat Arun',thai:'วัดอรุณราชวราราม',lat:13.7437,lng:100.4889,img:'https://commons.wikimedia.org/wiki/Special:FilePath/0000140%20-%20Wat%20Arun%20Ratchawararam%20005.jpg?width=1200',
   history:{en:'The Temple of Dawn rises from the Chao Phraya in a mosaic of porcelain and myth.',th:'วัดอรุณริมเจ้าพระยา งดงามด้วยพระปรางค์ประดับกระเบื้องเคลือบ'},
   famous:{en:'Riverside prang',th:'พระปรางค์ริมแม่น้ำ'},
   prayer:{en:'New beginnings and illumination',th:'เริ่มต้นใหม่และแสงสว่าง'},
   spot:{en:'The view back to Wat Pho from the ferry',th:'มุมมองจากเรือข้ามฟาก'},
-  hours:'08:00–18:00',duration:{en:'45 min',th:'45 นาที'},travel:{en:'Tha Tien ferry, 5 minutes',th:'นั่งเรือท่าเตียน 5 นาที'}},
+  closing:{en:'Cross the water and meet the morning light.',th:'ข้ามสายน้ำไปพบกับแสงแรกของวัน'},hours:'08:00–18:00',duration:{en:'45 min',th:'45 นาที'},travel:{en:'Tha Tien ferry, 5 minutes',th:'นั่งเรือท่าเตียน 5 นาที'}},
  {n:'Wat Kalayanamit',thai:'วัดกัลยาณมิตร',lat:13.7384,lng:100.4931,img:'https://commons.wikimedia.org/wiki/Special:FilePath/Entrance%20of%20Wat%20Kanlayanamit.jpg?width=1200',
   history:{en:'A serene riverside temple, known for its enormous seated Buddha and Chinese-influenced heritage.',th:'วัดริมน้ำอันสงบ มีพระพุทธไตรรัตนนายกองค์ใหญ่และกลิ่นอายไทย-จีน'},
   famous:{en:'Luang Pho To Buddha',th:'หลวงพ่อโต'},
   prayer:{en:'Safe journeys and true friendship',th:'การเดินทางปลอดภัยและมิตรภาพ'},
   spot:{en:'The bell tower, looking toward the river',th:'หอระฆังริมแม่น้ำ'},
-  hours:'08:00–16:30',duration:{en:'30 min',th:'30 นาที'},travel:{en:'12 min riverside walk from Wat Arun',th:'เดินเลียบแม่น้ำ 12 นาทีจากวัดอรุณ'}},
+  closing:{en:'Stay by the river a little longer.',th:'อยู่ริมแม่น้ำให้นานขึ้นอีกนิด'},hours:'08:00–16:30',duration:{en:'30 min',th:'30 นาที'},travel:{en:'12 min riverside walk from Wat Arun',th:'เดินเลียบแม่น้ำ 12 นาทีจากวัดอรุณ'}},
  {n:'Wat Ratchabophit',thai:'วัดราชบพิธสถิตมหาสีมาราม',lat:13.7482,lng:100.4996,img:'https://commons.wikimedia.org/wiki/Special:FilePath/Wat%20Ratchabopit%20%28I%29.jpg?width=1200',
   history:{en:'A jewel-box temple where Thai craftsmanship meets distinctive European Gothic design.',th:'วัดงดงามราวกล่องอัญมณี ผสานช่างศิลป์ไทยกับศิลปะตะวันตก'},
   famous:{en:'Porcelain chedi & cloister',th:'พระเจดีย์กระเบื้องเคลือบ'},
   prayer:{en:'Harmony and balanced perspective',th:'ความสมดุลและความกลมเกลียว'},
   spot:{en:'The tiled courtyard in soft shade',th:'ลานกระเบื้องและระเบียงคด'},
-  hours:'08:00–17:00',duration:{en:'25 min',th:'25 นาที'},travel:{en:'20 min walk, or a short tuk-tuk',th:'เดิน 20 นาที หรือรถรับจ้างระยะสั้น'}},
+  closing:{en:'Look closer: the quietest beauty is in the edges.',th:'มองให้ใกล้ ความงามที่เงียบที่สุดอยู่ตามขอบมุม'},hours:'08:00–17:00',duration:{en:'25 min',th:'25 นาที'},travel:{en:'20 min walk, or a short tuk-tuk',th:'เดิน 20 นาที หรือรถรับจ้างระยะสั้น'}},
  {n:'Wat Suthat',thai:'วัดสุทัศนเทพวราราม',lat:13.7500,lng:100.4996,img:'https://commons.wikimedia.org/wiki/Special:FilePath/Wat%20suthud.jpg?width=1200',
   history:{en:'One of Bangkok\u2019s grandest royal temples, framed by the iconic Giant Swing.',th:'พระอารามหลวงอันยิ่งใหญ่ คู่กับเสาชิงช้าอันเป็นสัญลักษณ์'},
   famous:{en:'Giant Swing & vast murals',th:'เสาชิงช้าและจิตรกรรมฝาผนัง'},
   prayer:{en:'Stability, courage and success',th:'ความมั่นคง ความกล้าหาญ และความสำเร็จ'},
   spot:{en:'The symmetrical sweep beneath Sao Chingcha',th:'มุมสมมาตรใต้เสาชิงช้า'},
-  hours:'08:00–18:00',duration:{en:'35 min',th:'35 นาที'},travel:{en:'5 min walk from Ratchabophit',th:'เดิน 5 นาทีจากวัดราชบพิธ'}},
+  closing:{en:'Stand beneath the swing and let the old city breathe.',th:'ยืนใต้เสาชิงช้า แล้วปล่อยให้เมืองเก่าหายใจ'},hours:'08:00–18:00',duration:{en:'35 min',th:'35 นาที'},travel:{en:'5 min walk from Ratchabophit',th:'เดิน 5 นาทีจากวัดราชบพิธ'}},
  {n:'Wat Saket',thai:'วัดสระเกศ',lat:13.7537,lng:100.5062,img:'https://commons.wikimedia.org/wiki/Special:FilePath/Wat%20Saket%2C%20Bangkok%2C%20Thailand.jpg?width=1200',
   history:{en:'The Golden Mount is a peaceful, spiralling climb to one of the old city\u2019s most cinematic views.',th:'ภูเขาทองคือการเดินขึ้นอย่างสงบสู่เจดีย์ทองและวิวเมืองเก่า'},
   famous:{en:'Golden chedi & city panorama',th:'พระบรมบรรพตและวิวเมือง'},
   prayer:{en:'Elevation, wisdom and good fortune',th:'ปัญญา ความก้าวหน้า และโชคดี'},
   spot:{en:'The westward panorama at golden hour',th:'ทิศตะวันตกยามแสงเย็น'},
-  hours:'07:30–19:00',duration:{en:'45 min',th:'45 นาที'},travel:{en:'18 min walk from Wat Suthat',th:'เดิน 18 นาทีจากวัดสุทัศน์'}}
+  closing:{en:'Take the last steps slowly; the view will wait.',th:'ค่อย ๆ เดินขึ้นในช่วงสุดท้าย วิวจะรอเราอยู่'},hours:'07:30–19:00',duration:{en:'45 min',th:'45 นาที'},travel:{en:'18 min walk from Wat Suthat',th:'เดิน 18 นาทีจากวัดสุทัศน์'}}
 ];
 
 const timeline=[
@@ -354,6 +358,8 @@ const photos=[
 ];
 
 function bi(obj,cls){cls=cls||'';return `<span data-en class="${cls}">${obj.en}</span><span data-th class="${cls} thai">${obj.th}</span>`}
+const storage={get(key,fallback=''){try{return localStorage.getItem(key)??fallback}catch{return fallback}},set(key,value){try{localStorage.setItem(key,value)}catch{}}};
+function readList(key){try{const value=JSON.parse(storage.get(key,'[]'));return Array.isArray(value)?value:[]}catch{return[]}}
 
 // hero slider — cycles through temple photos, left-to-right
 const heroOrder=[2,0,1,6,4]; // Wat Arun, Wat Phra Kaew, Wat Pho, Wat Saket, Wat Ratchabophit
@@ -420,6 +426,7 @@ document.getElementById('templeSpreads').innerHTML=temples.map((t,i)=>`
     <h3>${bi({en:t.n,th:t.thai})}</h3>
     <p class="thai-name thai">${bi({en:t.thai,th:t.n})}</p>
     <p class="hist">${bi(t.history)}</p>
+    <p class="closing-note">${bi(t.closing)}</p>
     <div class="facts">
       <div class="fact"><b>${bi({en:'FAMOUS FOR',th:'จุดเด่น'})}</b><span>${bi(t.famous)}</span></div>
       <div class="fact"><b>${bi({en:'PRAYER',th:'คำอธิษฐาน'})}</b><span>${bi(t.prayer)}</span></div>
@@ -441,8 +448,13 @@ document.getElementById('photoGrid').innerHTML=photos.map(([src,cap])=>`
 <figure><img src="${src}" alt="${cap.en}" loading="lazy"><figcaption>${bi(cap)}</figcaption></figure>`).join('');
 
 // map
+function addBase(m){
+  const u='https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+  L.tileLayer(u+'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{maxZoom:16,attribution:'Tiles © Esri — Esri, HERE, Garmin, OpenStreetMap contributors'}).addTo(m);
+  L.tileLayer(u+'World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16}).addTo(m);
+}
 const map=L.map('map',{scrollWheelZoom:false,zoomControl:true}).setView([13.747,100.497],14);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+addBase(map);
 const coords=temples.map(t=>[t.lat,t.lng]);
 L.polyline(coords,{color:'#15130F',weight:2,opacity:.85}).addTo(map);
 map.fitBounds(L.latLngBounds(coords),{padding:[36,36]});
@@ -452,7 +464,7 @@ temples.forEach((t,i)=>{
 });
 
 // checklist
-const saved=JSON.parse(localStorage.getItem('btq-checklist-v2')||'[]');
+const saved=readList('btq-checklist-v2');
 const checklistItems=document.getElementById('checklistItems');
 checklistItems.innerHTML=temples.map((t,i)=>`<button class="stamp ${saved.includes(i)?'on':''}" data-id="${i}" aria-label="Mark ${t.n} as visited">${i+1}</button>`).join('');
 function updateChecklist(){
@@ -460,7 +472,7 @@ function updateChecklist(){
   document.getElementById('checklistCount').textContent=`${all.length} / 7`;
   document.getElementById('checklistFill').style.width=`${all.length/7*100}%`;
   document.getElementById('checklistDone').style.opacity=all.length===7?1:0;
-  localStorage.setItem('btq-checklist-v2',JSON.stringify(all.map(x=>+x.dataset.id)));
+  storage.set('btq-checklist-v2',JSON.stringify(all.map(x=>+x.dataset.id)));
 }
 checklistItems.addEventListener('click',e=>{const b=e.target.closest('.stamp');if(!b)return;b.classList.toggle('on');updateChecklist()});
 updateChecklist();
@@ -612,41 +624,140 @@ const trips=[
  ['08:00','ตลาดปลาซึกิจิ','ซูชิ ไข่ม้วน และของทะเลสด ๆ เป็นมื้อเช้า'],
  ['10:30','กินซ่า / อากิฮาบาระ','ช้อปของฝาก แผ่นสิทธิ์คืนภาษี'],
  ['14:00','ไปสนามบิน','ถึงสนามบิน 3 ชม. ก่อนไฟลต์ ระวังสัมภาระหลายใบ']]]],
- tips:[['เช็คเงื่อนไขเข้าเมือง','ตรวจข้อกำหนดวีซ่าและเอกสารล่าสุดของคนไทยก่อนเดินทาง'],['ช่วงพายุไต้ฝุ่น','ก.ย. เป็นฤดูไต้ฝุ่น ทำประกันเดินทางและเผื่อวันสำรอง'],['ตั๋วรถไฟและพาส','เทียบราคาตั๋วเดี่ยวกับพาสรถไฟ บางเส้นทางจองล่วงหน้าเท่านั้น']]}
+ tips:[['เช็คเงื่อนไขเข้าเมือง','ตรวจข้อกำหนดวีซ่าและเอกสารล่าสุดของคนไทยก่อนเดินทาง'],['ช่วงพายุไต้ฝุ่น','ก.ย. เป็นฤดูไต้ฝุ่น ทำประกันเดินทางและเผื่อวันสำรอง'],['ตั๋วรถไฟและพาส','เทียบราคาตั๋วเดี่ยวกับพาสรถไฟ บางเส้นทางจองล่วงหน้าเท่านั้น']]},
+{id:'nan',tab:{en:'Nan',th:'น่าน'},title:{en:'Slow Nan',th:'น่าน เมืองช้า ๆ'},tag:{en:'3 days, 2 nights · murals, mist, old town',th:'3 วัน 2 คืน · วัดเก่า ภาพจิตรกรรม ทะเลหมอก'},q:'จังหวัดน่าน',
+ stats:['3D2N','Fly ~1h20','฿7–10k'],
+ days:[[{en:'Day 1 · Old Nan',th:'วันที่ 1 · เมืองเก่าน่าน'},[
+ ['09:30','บินถึงน่าน','เช็คตารางบินล่าสุดก่อนจอง เช่ารถหรือจองรถรับส่งเข้าเมือง'],
+ ['11:00','วัดภูมินทร์','โบสถ์จตุรมุขและภาพจิตรกรรมฝาผนังชื่อดัง ใช้เวลาเดินดูช้า ๆ'],
+ ['13:00','ข้าวซอยน่าน มื้อกลางวัน','ร้านท้องถิ่นในเมือง ลองอาหารเหนือแบบน่าน'],
+ ['14:30','พิพิธภัณฑ์แห่งชาติน่าน','อาคารเก่ากลางเมือง ชมวัตถุโบราณและประวัติเมือง'],
+ ['16:30','วัดพระธาตุแช่แห้ง','วัดบนเนินนอกเมือง ชมวิวเมืองยามเย็น']]],
+ [{en:'Day 2 · Hills & mist',th:'วันที่ 2 · ภูเขา & ทะเลหมอก'},[
+ ['05:30','ออกเดินทางไปดอยเสมอดาว','ขับจากเมืองประมาณ 1.5 ชม. ถนนเป็นทางโค้ง ขับช้า ๆ'],
+ ['08:00','ชมวิวหุบเขา','เช้าอาจเจอทะเลหมอกตามฤดู นั่งจิบกาแฟรอแสง'],
+ ['11:30','กลับเข้าเมือง พักผ่อน','พักกลางวัน ชาร์จแรงก่อนเดินเล่นตอนเย็น'],
+ ['16:00','เดินเล่นเมืองเก่า','คาเฟ่ ร้านผ้าทอ และถนนในย่านวัดภูมินทร์']]],
+ [{en:'Day 3 · Village & home',th:'วันที่ 3 · หมู่บ้าน & ขากลับ'},[
+ ['09:00','วัดหนองบัว','วัดสไตล์ไทลื้อ ชมภาพจิตรกรรมและหมู่บ้านทอผ้า ห่างจากเมืองราว 30 กม.'],
+ ['11:30','ซื้อของฝาก','ผ้าทอไทลื้อและของฝากท้องถิ่น'],
+ ['13:30','ไปสนามบินน่าน','เผื่อเวลาเช็คอินและคืนรถเช่า']]]],
+ tips:[['ขับรถบนเขาช้า ๆ','ทางไปดอยเสมอดาวเป็นโค้งต่อเนื่อง ออกตอนเช้าตรู่และระวังหมอก'],['ทะเลหมอกขึ้นกับฤดู','ช่วงที่เห็นหมอกต่างกันตามปี เช็คสภาพอากาศและถนนก่อนออกเดินทาง'],['จองรถล่วงหน้า','ในเมืองรถสาธารณะน้อย การเช่ารถหรือรถรับส่งสะดวกที่สุด']]},
+{id:'kanchanaburi',tab:{en:'Kanchanaburi',th:'กาญจนบุรี'},title:{en:'River & Remembrance',th:'สายน้ำและความทรงจำ'},tag:{en:'2 days, 1 night · bridge, history, waterfall',th:'2 วัน 1 คืน · สะพานแม่น้ำแคว ประวัติศาสตร์ น้ำตก'},q:'กาญจนบุรี',
+ stats:['2D1N','Car ~2.5–3h','฿3–5k'],
+ days:[[{en:'Day 1 · Bridge & history',th:'วันที่ 1 · สะพาน & ประวัติศาสตร์'},[
+ ['07:30','ออกจากกรุงเทพฯ','ขับตามถนนเพชรเกษมหรือสาย 4 ราว 2.5–3 ชม.'],
+ ['10:30','สะพานข้ามแม่น้ำแคว','เดินข้ามสะพานเหล็กและดูรถไฟสายมรณะริมน้ำ'],
+ ['12:30','ข้าวกลางวันริมน้ำ','ร้านอาหารริมแม่น้ำแคว'],
+ ['14:30','สุสานทหารสัมพันธมิตรดอนรัก','พื้นที่เงียบสงบและเป็นที่รำลึกถึงเชลยศึก'],
+ ['18:00','พักริมน้ำ','ที่พักแพหรือรีสอร์ตริมแม่น้ำ ดูพระอาทิตย์ตก']]],
+ [{en:'Day 2 · Erawan',th:'วันที่ 2 · น้ำตกเอราวัณ'},[
+ ['08:00','น้ำตกเอราวัณ','ขับจากเมืองราว 1.5 ชม. ไปตอนเช้าคนน้อย เดินขึ้นชั้นต่าง ๆ'],
+ ['12:30','ข้าวกลางวัน + ของฝาก','แวะร้านใกล้ทางออกอุทยานฯ'],
+ ['14:00','เดินทางกลับกรุงเทพฯ','ออกก่อนบ่ายแก่เพื่อเลี่ยงรถติด']]]],
+ tips:[['เช็คเวลาและการจอง','น้ำตกเอราวัณมีระบบจำกัดผู้เข้าชมในบางช่วง ตรวจเวลาเปิดและเงื่อนไขก่อนไป'],['เคารพสถานที่','สุสานและสะพานเป็นพื้นที่รำลึก แต่งกายสุภาพและรักษาความสงบ'],['รองเท้าสำหรับน้ำตก','พื้นหินลื่น พกรองเท้าเดินน้ำและชุดเปลี่ยน']]},
+{id:'ayutthaya',tab:{en:'Ayutthaya',th:'อยุธยา'},title:{en:'The Old Capital',th:'ราชธานีเก่า'},tag:{en:'2 days, 1 night · ruins, bikes, riverside',th:'2 วัน 1 คืน · วัดร้าง ปั่นจักรยาน ริมน้ำ'},q:'พระนครศรีอยุธยา',
+ stats:['2D1N','Car ~1.5h','฿2–3.5k'],
+ days:[[{en:'Day 1 · Ruins & sunset',th:'วันที่ 1 · วัดร้าง & พระอาทิตย์ตก'},[
+ ['08:00','ออกจากกรุงเทพฯ','ขับหรือนั่งรถไฟจากหัวลำโพง/กรุงเทพอภิวัฒน์ ใช้เวลาราว 1.5 ชม.'],
+ ['09:30','วัดมหาธาตุ','พระเศียรในรากไม้ จุดที่คนมาถ่ายภาพมากที่สุดของอยุธยา'],
+ ['11:00','วัดพระศรีสรรเพชญ์','เจดีย์ทรงระฆังสามองค์ในเขตพระราชวังหลวงเก่า'],
+ ['12:30','ก๋วยเตี๋ยวเรือ / กล้วยทอด','อาหารท้องถิ่นแถวตัวเมือง'],
+ ['15:00','เช่าจักรยานปั่นชมเมือง','ปั่นช้า ๆ ตามถนนในเขตเมืองเก่า เลือกช่วงบ่ายแก่ที่แดดอ่อน'],
+ ['17:00','วัดไชยวัฒนาราม','ชมพระอาทิตย์ตกกับปรางค์ริมแม่น้ำ']]],
+ [{en:'Day 2 · Morning stillness',th:'วันที่ 2 · เช้าเงียบ ๆ'},[
+ ['08:00','วัดใหญ่ชัยมงคล','เจดีย์ใหญ่และพระนอนองค์ใหญ่ ไปตอนเช้าอากาศดี'],
+ ['10:30','ล่องเรือรอบเกาะเมือง','ชมวัดและบ้านเรือนริมน้ำจากแม่น้ำ'],
+ ['13:00','กลับกรุงเทพฯ','ออกก่อนบ่ายแก่เพื่อเลี่ยงรถติด']]]],
+ tips:[['แต่งกายสุภาพ','วัดหลายแห่งยังเป็นพื้นที่ศักดิ์สิทธิ์ ไหล่และเข่าควรปกปิด'],['เลี่ยงแดดเที่ยง','พื้นที่โล่งร้อนมาก เที่ยวเช้าหรือเย็น พกหมวกและน้ำ'],['อย่าปีนโบราณสถาน','ถ่ายรูปได้แต่ห้ามปีนหรือแตะต้อง เคารพป้ายเตือน']]},
+{id:'luangprabang',tab:{en:'Luang Prabang',th:'หลวงพระบาง'},title:{en:'Laos, Slowly',th:'ลาว ช้า ๆ ริมโขง'},tag:{en:'3 days, 2 nights · alms, temples, waterfall',th:'3 วัน 2 คืน · ใส่บาตร วัด น้ำตก'},q:'Luang Prabang Laos',
+ stats:['3D2N','Fly ~1h45','฿10–15k'],
+ days:[[{en:'Day 1 · Old town',th:'วันที่ 1 · เมืองเก่า'},[
+ ['09:00','บินกรุงเทพฯ → หลวงพระบาง','บินตรงราว 1.5–2 ชม. ตรวจสายการบินและตารางล่าสุดก่อนจอง'],
+ ['11:30','เช็คอินในเมืองเก่า','ที่พักในเมืองเก่าเดินถึงได้เกือบทุกที่'],
+ ['14:00','วัดเชียงทอง','วัดสำคัญที่สุดของเมือง มีลายกระจกสีสวย'],
+ ['16:00','พิพิธภัณฑ์พระราชวังหลวง','อดีตพระราชวังเก่า ตรวจเวลาเปิดก่อนไป'],
+ ['17:30','ภูสี','ขึ้นบันไดชมพระอาทิตย์ตกและวิวเมือง'],
+ ['19:00','ตลาดกลางคืน','ผ้าทอและของฝากบนถนนกลางเมือง']]],
+ [{en:'Day 2 · Alms & falls',th:'วันที่ 2 · ใส่บาตร & น้ำตก'},[
+ ['05:45','พิธีตักบาตรเช้า','ชมจากระยะห่างอย่างสงบ ไม่ใช้แฟลชและไม่เข้าใกล้พระ'],
+ ['08:30','กาแฟและขนมปังบาแก็ต','ธรรมเนียมที่เหลือมาจากยุคอาณานิคมฝรั่งเศส'],
+ ['10:30','น้ำตกกวางสี','ขับจากเมืองราว 40–60 นาที เดินตามทางขึ้นชั้นต่าง ๆ'],
+ ['16:30','กลับเข้าเมือง','พักก่อนมื้อเย็น'],
+ ['19:00','เดินเล่นริมโขง','ร้านอาหารและคาเฟ่ริมแม่น้ำ']]],
+ [{en:'Day 3 · Slow morning',th:'วันที่ 3 · เช้าเดินช้า ๆ'},[
+ ['09:00','เดินเล่นริมโขง + ซื้อของฝาก','ผ้าทอและงานฝีมือ'],
+ ['11:30','ไปสนามบิน','เผื่อเวลาเช็คอินและเดินทาง ~20 นาที']]]],
+ tips:[['เช็คเงื่อนไขเข้าเมือง','พลเมืองอาเซียนมักเข้าได้โดยไม่ต้องขอวีซ่า แต่เงื่อนไขอาจเปลี่ยน ตรวจก่อนเดินทางและพกพาสปอร์ตอายุเหลือ 6 เดือนขึ้นไป'],['มารยาทตักบาตร','แต่งกายสุภาพ ถอยห่าง ไม่ถ่ายภาพระยะประชิดหรือใช้แฟลช'],['ใช้เงินกีบ/สำรองเงินสด','ตลาดและร้านเล็กนิยมเงินสด แลกเงินย่อยพกไว้']]},
+{id:'hoian',tab:{en:'Hoi An',th:'ฮอยอัน'},title:{en:'Lantern Town',th:'เมืองโคมไฟ'},tag:{en:'3 days, 2 nights · old town, beach, lanterns',th:'3 วัน 2 คืน · เมืองเก่า ชายหาด โคมไฟยามค่ำ'},q:'Hoi An Vietnam',
+ stats:['3D2N','Fly ~1h50','฿12–18k'],
+ days:[[{en:'Day 1 · Old town',th:'วันที่ 1 · เมืองเก่า'},[
+ ['09:00','บินกรุงเทพฯ → ดานัง','บินตรงราว 1 ชม. 50 นาที จากนั้นนั่งรถไปฮอยอัน ~45 นาที'],
+ ['13:00','เช็คอินในเมืองเก่า','ที่พักใกล้เมืองเก่าเดินถึงทุกที่'],
+ ['15:00','สะพานญี่ปุ่น + เมืองเก่า','เดินช้า ๆ ผ่านบ้านเก่า ศาลเจ้า และร้านกาแฟ'],
+ ['18:30','โคมไฟยามค่ำริมแม่น้ำ','นั่งเรือหรือเดินเล่นริมน้ำตอนไฟเปิด']]],
+ [{en:'Day 2 · Fields & beach',th:'วันที่ 2 · ผักและชายหาด'},[
+ ['08:00','หมู่บ้านผักตราเกว','ปั่นจักรยานหรือเข้าคลาสทำอาหารกับชาวบ้าน'],
+ ['12:00','กินข้าวกลางวัน','ลองเมนูท้องถิ่น เช่น เกาเหลา หมี่กวาง'],
+ ['15:30','หาดอานบ่าง','พักเล่นน้ำและนั่งริมทะเลตอนบ่ายแก่'],
+ ['19:00','ตลาดกลางคืน','เดินเล่นและซื้อของฝาก']]],
+ [{en:'Day 3 · My Son & home',th:'วันที่ 3 · หมีเซิน & ขากลับ'},[
+ ['06:30','หมีเซิน','ปราสาทจามโบราณ ไปตอนเช้าอากาศดีและคนน้อย'],
+ ['11:00','กลับเมือง + ซื้อของฝาก','ผ้า โคมไฟ และกาแฟ'],
+ ['14:00','ไปสนามบินดานัง','เผื่อเวลาเดินทางราว 45 นาที']]]],
+ tips:[['ตรวจเงื่อนไขเข้าเมือง','คนไทยเข้าเวียดนามโดยไม่ต้องขอวีซ่าได้ไม่เกินประมาณ 30 วัน แต่เงื่อนไขอาจเปลี่ยน ตรวจก่อนเดินทางและพกพาสปอร์ตอายุเหลือ 6 เดือนขึ้นไป'],['ใช้เงินดอง','ร้านเล็กและตลาดนิยมเงินสด แลกเงินย่อยไว้'],['ฤดูฝนและพายุ','ปลายปีมีฝนและบางปีน้ำท่วมเมืองเก่า เช็คสภาพอากาศก่อนบิน']]},
+{id:'taipei',tab:{en:'Taipei',th:'ไทเป'},title:{en:'Taipei, Unhurried',th:'ไทเป ไม่ต้องรีบ'},tag:{en:'3 days, 2 nights · temples, night markets, hills',th:'3 วัน 2 คืน · วัด ตลาดกลางคืน ภูเขา'},q:'Taipei Taiwan',
+ stats:['3D2N','Fly ~3h30','฿18–28k'],
+ days:[[{en:'Day 1 · Old Taipei',th:'วันที่ 1 · ไทเปเก่า'},[
+ ['08:00','บินกรุงเทพฯ → ไทเป','ราว 3.5 ชม. ซื้อบัตร EasyCard เพื่อใช้รถไฟใต้ดิน'],
+ ['13:00','เช็คอินและกินข้าวกลางวัน','ที่พักใกล้สถานี MRT สะดวกที่สุด'],
+ ['15:00','วัดหลงซาน','วัดเก่าแก่ใจกลางเมือง ควันธูปและผู้คนสักการะต่อเนื่อง'],
+ ['19:00','ตลาดกลางคืน','เดินกินไปเรื่อย ๆ ของกินริมทาง']]],
+ [{en:'Day 2 · Hills & city',th:'วันที่ 2 · ภูเขา & เมือง'},[
+ ['07:00','เขาช้าง (Xiangshan)','เดินขึ้นไม่นาน ชมวิวไทเป 101 จากด้านบน'],
+ ['10:30','ไทเป 101','ขึ้นจุดชมวิวหรือเดินเล่นย่านซินอี้'],
+ ['14:00','คาเฟ่และร้านชา','พักช่วงบ่ายในย่านเมืองเก่า'],
+ ['18:30','ตลาดซื่อหลิน','ตลาดกลางคืนดังที่สุดแห่งหนึ่งของไทเป']]],
+ [{en:'Day 3 · Jiufen & home',th:'วันที่ 3 · จิ่วเฟิ่น & ขากลับ'},[
+ ['08:30','เดินทางไปจิ่วเฟิ่น','รถบัสหรือรถไฟต่อรถ ราว 1–1.5 ชม.'],
+ ['10:30','ถนนเก่าจิ่วเฟิ่น','ร้านชา บันไดหินและวิวทะเล ไปเช้าเลี่ยงคนแน่น'],
+ ['14:00','กลับไทเป','ซื้อของฝากและเก็บกระเป๋า'],
+ ['17:00','ไปสนามบิน','เผื่อเวลาเดินทางไปสนามบิน']]]],
+ tips:[['เช็คเงื่อนไขเข้าเมือง','ไต้หวันใช้โครงการยกเว้นวีซ่าแบบทดลองให้คนไทยถึง 31 ก.ค. 2027 แต่ระยะพำนักและเงื่อนไขอาจเปลี่ยน ตรวจกับสถานทูตก่อนเดินทาง'],['ฝนและพายุไต้ฝุ่น','ช่วงฤดูร้อนถึงต้นฤดูใบไม้ร่วงมีพายุบ่อย เผื่อวันสำรองและทำประกันเดินทาง'],['จิ่วเฟิ่นไปเช้า','ช่วงสายถึงบ่ายคนแน่นมาก ไปเช้าจะเดินสบายกว่า']]}
 ];
 const PL={
 nakhon:[
 ['Rafting on the Nakhon Nayok River','ล่องแก่งลำน้ำนครนายก',14.27,101.30,'','th','ล่องเรือยางฝ่าแก่งกลางป่าและภูเขา หน้าฝนน้ำแรง สนุกและท้าทายเป็นพิเศษ','แก่งน้ำแรง ป่าสองฝั่ง','2–3 ชม.','ขับจากตัวเมืองนครนายก ~30–40 นาที','โทรเช็คระดับน้ำ เลือกเจ้าที่มีชูชีพและไกด์'],
-['ATV Trails, Pak Phli','สนาม ATV ปากพลี',14.20,101.33,'','th','สนามขับ ATV ผ่านทางดินโคลน ป่ายาง และลำธารตื้น มีไกด์นำและมีให้เลือกเส้นสั้น–ยาว','ทางโคลนและลำธาร','1–2 ชม.','ต่อจากล่องแก่ง ~20–30 นาที','ใส่ชุดที่เปื้อนได้ ปิดจมูกกันฝุ่น'],
+['ATV Trails, Pak Phli','สนาม ATV ปากพลี',14.20,101.33,'ปากพลี นครนายก','th','สนามขับ ATV ผ่านทางดินโคลน ป่ายาง และลำธารตื้น มีไกด์นำและมีให้เลือกเส้นสั้น–ยาว','ทางโคลนและลำธาร','1–2 ชม.','ต่อจากล่องแก่ง ~20–30 นาที','ใส่ชุดที่เปื้อนได้ ปิดจมูกกันฝุ่น'],
 ['Sarika Waterfall','น้ำตกสาริกา',14.247,101.289,'น้ำตกสาริกา','th','น้ำตกหลายชั้นใกล้ตัวเมือง เดินง่าย ร่มรื่น เล่นน้ำได้ในหน้าฝน','น้ำตกหลายชั้น ร่มเย็น','1–2 ชม.','ขับจากตัวเมือง ~20 นาที','มาเช้าคนน้อย ใส่รองเท้ากันลื่น'],
 ['Wang Takhrai Waterfall','น้ำตกวังตะไคร้',14.26,101.32,'น้ำตกวังตะไคร้','th','น้ำตกในป่ารื่นที่เดินเล่นสบาย ๆ เหมาะพักหลังกิจกรรมสนุกแรง ๆ','ธารน้ำใสในร่มไม้','1 ชม.','ต่อจากสาริกา ~15 นาที','เช็คว่าเปิดและระดับน้ำก่อนไป'],
 ['Khun Dan Prakan Chon Dam','เขื่อนขุนด่านปราการชล',14.286,101.296,'เขื่อนขุนด่านปราการชล','th','เขื่อนคอนกรีตยาวมาก วิวอ่างเก็บน้ำและภูเขาสวย จุดแวะเสริมถ้ามีเวลา','สันเขื่อนยาว วิวกว้าง','45 นาที','ใกล้สาริกา ~15 นาที','แสงเย็นสวยที่สุด']],
 sattahip:[
-['Ban Amphur Seafood','ซีฟู้ดบ้านอำเภอ',12.70,100.905,'','th','ชุมชนประมงที่มีร้านอาหารทะเลสดจากเรือ เลือกปลา ปู กุ้งเองแล้วให้ร้านปรุง','ซีฟู้ดสดราคาย่อมเยา','1–1.5 ชม.','ขับต่อจากทางหลวง 331 เข้าสัตหีบ','ถามราคาต่อกิโลก่อนสั่ง'],
+['Ban Amphur Seafood','ซีฟู้ดบ้านอำเภอ',12.70,100.905,'บ้านอำเภอ สัตหีบ','th','ชุมชนประมงที่มีร้านอาหารทะเลสดจากเรือ เลือกปลา ปู กุ้งเองแล้วให้ร้านปรุง','ซีฟู้ดสดราคาย่อมเยา','1–1.5 ชม.','ขับต่อจากทางหลวง 331 เข้าสัตหีบ','ถามราคาต่อกิโลก่อนสั่ง'],
 ['Ko Khram','เกาะครก',12.68,100.82,'เกาะครก','th','เกาะเล็กใกล้ชายฝั่งสัตหีบ น้ำใส เหมาะดำน้ำตื้นชมปลาและปะการังใกล้เกาะ','ปลาเล็กและปะการังใกล้เกาะ','ครึ่งวัน','เรือจากท่าใกล้สัตหีบ ~30–45 นาที','บางช่วงอยู่ในเขตทหารเรือ เช็คเงื่อนไข'],
 ['Ko Samae San','เกาะแสมสาร',12.565,100.955,'เกาะแสมสาร','th','กลุ่มเกาะยอดนิยมของคนกรุงเทพฯ ทะเลใส มีเรือรับจ้างและจุดดำน้ำหลายแห่ง','ทะเลใส หลายจุดดำน้ำ','ครึ่งวัน','ท่าเรือแสมสาร นั่งเรือ ~20–30 นาที','ดำลึกเลือกร้านที่มีอินสตรักเตอร์'],
 ['Ko Chuang','เกาะจวง',12.572,100.945,'เกาะจวง','th','เกาะใกล้แสมสาร มีหาดทรายสงบและน้ำใส เหมาะพักเล่นน้ำระหว่างทริปเรือ','หาดสงบ ดำน้ำตื้น','1–2 ชม.','รวมในทริปเรือเกาะแสมสาร','พกครีมกันแดดและรองเท้าเดินน้ำ']],
 saraburi:[
 ['Wat Phra Phutthabat','วัดพระพุทธบาท',14.73,100.807,'วัดพระพุทธบาท สระบุรี','th','พระอารามหลวงเก่าแก่ที่ประดิษฐานรอยพระพุทธบาท คนเดินทางมาสักการะสม่ำเสมอ','รอยพระพุทธบาท และตลาดหน้าวัด','1–1.5 ชม.','ขับจากกรุงเทพฯ ~2 ชม.','แต่งกายสุภาพ ไหล่และเข่าปกปิด'],
 ['Chet Sao Noi Waterfall','น้ำตกเจ็ดสาวน้อย',14.60,101.06,'น้ำตกเจ็ดสาวน้อย','th','น้ำตกหลายชั้นในอุทยานฯ เดินเข้าง่าย เล่นน้ำได้ตอนหน้าฝนถ้าน้ำไม่แรง','น้ำตกหลายชั้น','1–1.5 ชม.','จากพระพุทธบาท ~40 นาที','ระวังพื้นลื่น หลีกเลี่ยงเมื่อน้ำแรง'],
-['Streamside Mookata, Muak Lek','หมูกระทะริมลำธาร (มวกเหล็ก)',14.64,101.19,'','th','โซนร้านหมูกระทะและรีสอร์ตริมลำธารแถวมวกเหล็ก–แก่งคอย นั่งกินใกล้น้ำเย็น ๆ','นั่งกินริมน้ำ','1.5–2 ชม.','จากเจ็ดสาวน้อย ~30–40 นาที','เลือกโต๊ะพ้นแนวน้ำหลาก จองล่วงหน้า'],
+['Streamside Mookata, Muak Lek','หมูกระทะริมลำธาร (มวกเหล็ก)',14.64,101.19,'มวกเหล็ก สระบุรี','th','โซนร้านหมูกระทะและรีสอร์ตริมลำธารแถวมวกเหล็ก–แก่งคอย นั่งกินใกล้น้ำเย็น ๆ','นั่งกินริมน้ำ','1.5–2 ชม.','จากเจ็ดสาวน้อย ~30–40 นาที','เลือกโต๊ะพ้นแนวน้ำหลาก จองล่วงหน้า'],
 ['Wat Tham Phra Phothisat','ถ้ำพระโพธิสัตว์',14.70,100.85,'ถ้ำพระโพธิสัตว์','th','ถ้ำและภูเขาหินปูนที่มีวัดถ้ำ เดินขึ้นบันไดชมความงามธรรมชาติ','ถ้ำหินปูนและบันได','1 ชม.','อยู่ในอำเภอพระพุทธบาท','พกน้ำ ไฟฉาย และรองเท้ากันลื่น']],
 khaosok:[
 ['Khao Sok National Park','อุทยานแห่งชาติเขาสก',8.91,98.53,'อุทยานแห่งชาติเขาสก','th','ป่าฝนดึกดำบรรพ์ มีเขาหินปูน น้ำตก และสัตว์ป่ามากมาย เป็นหัวใจของทริปนี้','ป่าฝนและเขาหินปูน','ตลอดทริป','จากสนามบินสุราษฎร์ ~2 ชม.','พกยากันทาก ยุง และผ้ากันน้ำ'],
-['Sok River Tubing','ล่องห่วงยางลำน้ำสก',8.92,98.54,'','th','ล่องห่วงยางเรื่อย ๆ ตามน้ำใสท่ามกลางป่า หรือพายคายัคชิลล์ ๆ','ลอยน้ำกลางป่า','1–2 ชม.','ใกล้ที่พักโซนเขาสก','ถามระดับน้ำก่อน หน้าฝนอาจงดกิจกรรม'],
+['Sok River Tubing','ล่องห่วงยางลำน้ำสก',8.92,98.54,'Sok River Khao Sok','en','ล่องห่วงยางเรื่อย ๆ ตามน้ำใสท่ามกลางป่า หรือพายคายัคชิลล์ ๆ','ลอยน้ำกลางป่า','1–2 ชม.','ใกล้ที่พักโซนเขาสก','ถามระดับน้ำก่อน หน้าฝนอาจงดกิจกรรม'],
 ['Cheow Lan Lake','เขื่อนรัชชประภา (เชี่ยวหลาน)',8.945,98.63,'เขื่อนรัชชประภา','th','ทะเลสาบกลางหุบเขา มีภูเขาหินปูนโผล่พ้นน้ำและแพที่พักลอยน้ำ','ภูเขาหินปูนกลางทะเลสาบ','ครึ่งวัน','จากเขาสก ~1 ชม. แล้วเรือหางยาว','จองเรือและแพล่วงหน้า'],
-['Nam Talu Cave','ถ้ำน้ำทะลุ',8.99,98.55,'','th','ถ้ำใกล้ทะเลสาบที่มีลำธารไหลผ่านและหินงอกหินย้อย','ถ้ำหินงอก หินย้อย','1 ชม.','รวมในทริปเรือเชี่ยวหลาน','พกไฟฉาย เตรียมรองเท้าเปียกน้ำ'],
+['Nam Talu Cave','ถ้ำน้ำทะลุ',8.99,98.55,'Khao Sok cave Cheow Lan','en','ถ้ำใกล้ทะเลสาบที่มีลำธารไหลผ่านและหินงอกหินย้อย','ถ้ำหินงอก หินย้อย','1 ชม.','รวมในทริปเรือเชี่ยวหลาน','พกไฟฉาย เตรียมรองเท้าเปียกน้ำ'],
 ['Surat Thani Airport','สนามบินสุราษฎร์ธานี',9.1325,99.1356,'Surat Thani Airport','en','จุดเริ่มต้นและปลายทางของทริป เช่ารถหรือจองรถรับส่งไปเขาสก','ประตูสู่เขาสก','—','บินจากกรุงเทพฯ ~1 ชม. 20 นาที','จองรถรับส่งล่วงหน้า']],
 chiangmai:[
 ['Wat Phra Singh','วัดพระสิงห์',18.7881,98.9819,'Wat Phra Singh','en','วัดสำคัญประจำเมือง มีวิหารลายคำงดงามสไตล์ล้านนา','วิหารลายคำ ศิลปะล้านนา','45–60 นาที','ในเมืองเก่า เดินหรือสองแถวแดง','แต่งกายสุภาพ ถอดรองเท้าก่อนเข้า'],
 ['Wat Chedi Luang','วัดเจดีย์หลวง',18.7869,98.9866,'Wat Chedi Luang','en','เจดีย์อิฐโบราณกลางเมือง เคยสูงที่สุดของล้านนา เหลือร่องรอยยิ่งใหญ่','เจดีย์โบราณกลางเมืองเก่า','40 นาที','เดิน ~10 นาทีจากวัดพระสิงห์','มุมสวยตอนแดดบ่าย'],
 ['Wat Phra That Doi Suthep','วัดพระธาตุดอยสุเทพ',18.8048,98.9216,'Wat Phra That Doi Suthep','en','วัดบนภูเขาที่เป็นสัญลักษณ์ของเชียงใหม่ ชมวิวทั้งเมืองจากลานวัด','เจดีย์ทองและวิวเมือง','1.5–2 ชม.','รถแดงหรือแกร็บ ~30 นาที','ไปช่วงเย็นชมพระอาทิตย์ตก พกเสื้อกันหนาว'],
-['Nimmanhaemin Road','ถนนนิมมานเหมินท์',18.796,98.968,'','en','ย่านคาเฟ่ บาร์ และร้านดีไซน์ ซอยเล็กใหญ่ให้เดินดริ้งไปเรื่อย ๆ','บาร์ คาเฟ่ คราฟต์เบียร์','ตลอดคืน','แกร็บจากในเมือง ~15 นาที','ดื่มแล้วไม่ขับ กลับด้วยแกร็บ'],
+['Nimmanhaemin Road','ถนนนิมมานเหมินท์',18.796,98.968,'Nimmanhaemin Road','en','ย่านคาเฟ่ บาร์ และร้านดีไซน์ ซอยเล็กใหญ่ให้เดินดริ้งไปเรื่อย ๆ','บาร์ คาเฟ่ คราฟต์เบียร์','ตลอดคืน','แกร็บจากในเมือง ~15 นาที','ดื่มแล้วไม่ขับ กลับด้วยแกร็บ'],
 ['Wat Umong','วัดอุโมงค์',18.7787,98.953,'Wat Umong','en','วัดในป่าที่มีอุโมงค์อิฐโบราณและบรรยากาศสงบ','อุโมงค์โบราณกลางป่า','1 ชม.','แกร็บจากในเมือง ~15 นาที','ไปช่วงเช้าอากาศดี'],
 ['Warorot Market','ตลาดวโรรส',18.7908,99.0,'Warorot Market','en','ตลาดสดและของฝากใหญ่ริมแม่น้ำปิง ไส้อั่ว แคบหมู น้ำพริกหนุ่ม','ของฝากเหนือครบ','1–1.5 ชม.','ริมแม่น้ำปิง ในเมือง','ตลาดบางส่วนเปิดสาย ไปหลัง 9 โมง']],
 phuquoc:[
 ['Dinh Cau','ดิ่งเกิว',10.217,103.96,'Dinh Cau Phu Quoc','en','ศาลเจ้าเล็กบนโขดหินริมทะเลและประภาคาร จุดชมพระอาทิตย์ตกของเมือง','ประภาคารริมทะเล','40 นาที','เดินจากตลาดกลางคืน ~10 นาที','ไปช่วงเย็นเห็นแสงสวย'],
-['Duong Dong Night Market','ตลาดกลางคืนซองเดือง',10.214,103.964,'','en','ตลาดซีฟู้ดปิ้งย่าง ขนม และของฝาก คึกคักตอนค่ำ','อาหารทะเลปิ้งย่าง','1.5–2 ชม.','กลางเมืองซองเดือง','เช็คราคาก่อนสั่ง ต่อรองของฝาก'],
+['Duong Dong Night Market','ตลาดกลางคืนซองเดือง',10.214,103.964,'Duong Dong Phu Quoc','en','ตลาดซีฟู้ดปิ้งย่าง ขนม และของฝาก คึกคักตอนค่ำ','อาหารทะเลปิ้งย่าง','1.5–2 ชม.','กลางเมืองซองเดือง','เช็คราคาก่อนสั่ง ต่อรองของฝาก'],
 ['Sao Beach','หาดเซา',10.048,104.04,'Sao Beach Phu Quoc','en','หาดทรายขาวน้ำใสฝั่งใต้เกาะ เล่นน้ำ ถ่ายรูป และกินซีฟู้ดริมทะเล','ทรายขาว น้ำใส','2–3 ชม.','แท็กซี่/แกร็บ ~40 นาทีจากซองเดือง','ไปเช้าคนน้อย'],
 ['Hon Thom Cable Car','กระเช้าข้ามทะเลฮอนทอม',10.03,104.013,'Hon Thom Cable Car','en','กระเช้าข้ามทะเลยาวมากที่ชมวิวเกาะน้อยใหญ่จากด้านบน','วิวทะเลจากกระเช้า','1–1.5 ชม.','สถานีที่อันทอย ทางใต้ของเกาะ','เช็คเวลาเปิดและช่วงปิดบำรุง'],
 ['Sunset Town','ซันเซ็ตทาวน์ / สะพานจูบ',10.017,103.991,'Sunset Town Phu Quoc','en','เมืองสไตล์เมดิเตอร์เรเนียนริมทะเล มีสะพานจูบและโชว์ยามค่ำ','สะพานจูบและแสงยามค่ำ','1.5–2 ชม.','ใกล้อันทอย','ไปก่อนพระอาทิตย์ตก'],
@@ -661,17 +772,50 @@ japan:[
 ['Lake Kawaguchi','ทะเลสาบคาวากุจิ',35.516,138.764,'Lake Kawaguchi','en','ทะเลสาบยอดนิยมสำหรับชมฟูจิ มีคาเฟ่ ลานหญ้า และเส้นทางปั่นจักรยาน','วิวฟูจิริมทะเลสาบ','2–3 ชม.','รถไฟ/บัสจากชินจูกุ ~2 ชม.','วันที่ฟูจิโผล่ ควรมาช่วงเช้า'],
 ['Kotoku-in (Great Buddha)','พระใหญ่ไดบุตสึ คามาคุระ',35.3168,139.5358,'Kotoku-in','en','พระพุทธรูปสำริดขนาดใหญ่กลางแจ้ง เป็นสัญลักษณ์ของคามาคุระ','พระใหญ่สำริดกลางแจ้ง','45 นาที','รถไฟสาย Enoden ไปสถานีฮาเสะ','ซื้อตั๋วเล็ก ๆ เพื่อเข้าไปในองค์พระ'],
 ['Enoshima','เอโนชิมะ',35.299,139.48,'Enoshima','en','เกาะเล็กริมทะเล มีศาลเจ้า ถ้ำ และหอคอยชมพระอาทิตย์ตก','พระอาทิตย์ตกเหนือทะเล','2–3 ชม.','รถไฟ Enoden จากคามาคุระ','พกร่ม อากาศริมทะเลเปลี่ยนเร็ว'],
-['Tsukiji Outer Market','ตลาดปลาซึกิจิ',35.6655,139.7707,'Tsukiji fish market','en','ตลาดกลางแจ้งของอาหารทะเลสดและของกินริมทาง เหมาะเป็นมื้อเช้า','ซูชิ ไข่ม้วน ปลาสด','1.5–2 ชม.','รถไฟใต้ดินสถานีซึกิจิ','ไปเช้า บางร้านปิดบ่าย']]
+['Tsukiji Outer Market','ตลาดปลาซึกิจิ',35.6655,139.7707,'Tsukiji fish market','en','ตลาดกลางแจ้งของอาหารทะเลสดและของกินริมทาง เหมาะเป็นมื้อเช้า','ซูชิ ไข่ม้วน ปลาสด','1.5–2 ชม.','รถไฟใต้ดินสถานีซึกิจิ','ไปเช้า บางร้านปิดบ่าย']],
+nan:[
+['Wat Phumin','วัดภูมินทร์',18.7746,100.7727,'วัดภูมินทร์','th','วัดเก่าแก่ที่มีโบสถ์จตุรมุขและภาพจิตรกรรมฝาผนังโดดเด่นของเมืองน่าน','โบสถ์จตุรมุขและภาพจิตรกรรม','1 ชม.','ในตัวเมืองน่าน เดินจากที่พักย่านเมืองเก่า','ไปเช้าหรือเย็นแสงสวย แต่งกายสุภาพ'],
+['Nan National Museum','พิพิธภัณฑ์แห่งชาติน่าน',18.7742,100.7716,'พิพิธภัณฑ์สถานแห่งชาติ น่าน','th','พิพิธภัณฑ์ในอาคารเก่ากลางเมือง จัดแสดงประวัติศาสตร์และโบราณวัตถุของน่าน','อาคารเก่าและประวัติเมือง','1 ชม.','ตรงข้ามวัดภูมินทร์ เดินไม่กี่นาที','เช็ควันและเวลาเปิดก่อนไป'],
+['Wat Phra That Chae Haeng','วัดพระธาตุแช่แห้ง',18.7544,100.7885,'วัดพระธาตุแช่แห้ง','th','พระธาตุประจำปีเถาะบนเนินนอกเมือง วัดสำคัญที่ชาวน่านเคารพ','พระธาตุและวิวเมือง','1 ชม.','ขับจากตัวเมือง ~10 นาที','ไปช่วงเย็น แต่งกายสุภาพ'],
+['Doi Samer Dao','ดอยเสมอดาว',19.0,100.95,'ดอยเสมอดาว','th','จุดชมวิวหุบเขาในอุทยานแห่งชาติศรีน่าน ได้วิวกว้างและอากาศเย็น','วิวหุบเขาและหมอก','2–3 ชม.','ขับจากตัวเมืองน่านราว 1.5 ชม.','ออกเช้าตรู่ พกเสื้อกันหนาว'],
+['Wat Nong Bua','วัดหนองบัว',19.0887,100.7859,'วัดหนองบัว ท่าวังผา','th','วัดสไตล์ไทลื้อในหมู่บ้านทอผ้า มีภาพจิตรกรรมแบบพื้นบ้านและชุมชนที่ยังทอผ้าต่อเนื่อง','วัดไทลื้อและผ้าทอ','1–1.5 ชม.','ขับจากเมืองน่านราว 30–40 นาที','ซื้อผ้าทอจากชุมชนโดยตรง']],
+kanchanaburi:[
+['Bridge over the River Kwai','สะพานข้ามแม่น้ำแคว',14.0420,99.5026,'สะพานข้ามแม่น้ำแคว','th','สะพานรถไฟที่เกี่ยวข้องกับเส้นทางรถไฟสายมรณะ จุดสำคัญของประวัติศาสตร์สงคราม','สะพานเหล็กริมแม่น้ำ','1–1.5 ชม.','ในตัวเมืองกาญจนบุรี','ไปช่วงเช้าก่อนคนมาก'],
+['Don Rak War Cemetery','สุสานทหารสัมพันธมิตรดอนรัก',14.0307,99.5276,'Kanchanaburi War Cemetery','en','สุสานที่ระลึกถึงเชลยศึกที่เสียชีวิตระหว่างการสร้างทางรถไฟ จัดสวนสงบเรียบร้อย','สวนรำลึกและหลุมศพ','45 นาที','ใกล้ตัวเมือง ขับ ~5 นาที','เงียบและแต่งกายสุภาพ'],
+['Erawan Waterfall','น้ำตกเอราวัณ',14.3664,99.1428,'Erawan Falls','en','น้ำตกหลายชั้นสีเขียวมรกตในอุทยานแห่งชาติ เดินขึ้นไปทีละชั้นได้','น้ำตกเจ็ดชั้น','2–3 ชม.','ขับจากตัวเมือง ~1.5 ชม.','ไปเช้า ใส่รองเท้ากันลื่น']],
+ayutthaya:[
+['Wat Mahathat','วัดมหาธาตุ',14.3575,100.5577,'วัดมหาธาตุ อยุธยา','th','วัดสำคัญในเขตเมืองเก่า มีพระเศียรพระพุทธรูปที่ติดอยู่ในรากต้นไม้','พระเศียรในรากไม้','45 นาที','ในเขตอุทยานประวัติศาสตร์ เดินหรือปั่นจักรยาน','อย่ายืนหรือนั่งสูงกว่าพระเศียร'],
+['Wat Phra Si Sanphet','วัดพระศรีสรรเพชญ์',14.3558,100.5560,'วัดพระศรีสรรเพชญ์','th','เจดีย์ทรงระฆังสามองค์ในอดีตพระราชวังหลวง เป็นภาพจำของอยุธยา','เจดีย์ระฆังสามองค์','45 นาที','ใกล้วัดมหาธาตุ ปั่นจักรยาน ~5 นาที','แสงสวยช่วงเช้าและเย็น'],
+['Wat Chaiwatthanaram','วัดไชยวัฒนาราม',14.3454,100.5434,'วัดไชยวัฒนาราม','th','วัดริมแม่น้ำเจ้าพระยาที่มีปรางค์ประธานและระเบียงคด ชมพระอาทิตย์ตกได้สวย','ปรางค์ริมแม่น้ำ','1 ชม.','อยู่นอกเกาะเมือง ขับหรือรถรับจ้าง','ไปก่อนตะวันตก พกหมวก'],
+['Wat Yai Chai Mongkhon','วัดใหญ่ชัยมงคล',14.3446,100.5662,'วัดใหญ่ชัยมงคล','th','วัดที่มีเจดีย์องค์ใหญ่และพระนอนองค์ใหญ่ สร้างตั้งแต่สมัยอยุธยาตอนต้น','เจดีย์ใหญ่และพระนอน','45 นาที','ขับจากตัวเมือง ~10 นาที','ไปเช้า แต่งกายสุภาพ']],
+luangprabang:[
+['Wat Xieng Thong','วัดเชียงทอง',19.8968,102.1417,'Wat Xieng Thong','en','วัดสำคัญที่สุดของหลวงพระบางในศิลปะลาวแบบดั้งเดิม มีลายกระจกสีสวย','ลายกระจกสีและหลังคาซ้อน','1 ชม.','เดินจากเมืองเก่า ~10–15 นาที','ไปช่วงเช้าแสงสวย'],
+['Royal Palace Museum','พิพิธภัณฑ์พระราชวังหลวง',19.8926,102.1375,'Royal Palace Museum Luang Prabang','en','อดีตพระราชวังหลวงที่เปิดเป็นพิพิธภัณฑ์ จัดแสดงของราชวงศ์ลาว','พระราชวังเก่า','1 ชม.','เดินจากกลางเมืองเก่า','ตรวจเวลาเปิดและเงื่อนไขการเข้า'],
+['Mount Phousi','ภูสี',19.8933,102.1385,'Mount Phousi','en','เนินกลางเมืองที่ขึ้นบันไดไปชมพระอาทิตย์ตกและวิวเมืองกับแม่น้ำโขง','วิวพระอาทิตย์ตก','1 ชม.','เดินจากถนนสายหลักของเมืองเก่า','ไปก่อนตะวันตกเพราะคนแน่น'],
+['Kuang Si Falls','น้ำตกกวางสี',19.7500,101.9918,'Kuang Si Falls','en','น้ำตกหลายชั้นสีเขียวอมฟ้า ห่างจากเมืองราว 30 กม. เดินตามทางขึ้นไปทีละชั้น','น้ำตกสีเขียวมรกต','3–4 ชม.','รถตุ๊กตุ๊กหรือรถรับจ้าง ~40–60 นาที','ไปเช้า พกชุดว่ายน้ำและรองเท้ากันลื่น'],
+['Morning Alms Giving','พิธีตักบาตรเช้า',19.8900,102.1350,'Tak Bat','en','ธรรมเนียมที่พระสงฆ์เดินรับบิณฑบาตยามเช้าตามถนนในเมืองเก่า','ขบวนพระยามเช้า','45 นาที','เดินจากที่พักในเมืองเก่า','ชมอย่างเงียบ ไม่ใช้แฟลช ไม่เข้าใกล้พระ']],
+hoian:[
+['Hoi An Ancient Town','เมืองเก่าฮอยอัน',15.8801,108.3380,'Hoi An Ancient Town','en','เมืองท่าเก่าที่ยังเก็บบ้านเรือนและถนนสมัยเก่าไว้ เดินเที่ยวช้า ๆ ได้ทั้งวัน','เมืองเก่าและโคมไฟ','ครึ่งวัน','เดินจากที่พักในเมืองเก่า','ตรวจเงื่อนไขตั๋วเข้าเมืองเก่าก่อนไป'],
+['Japanese Covered Bridge','สะพานญี่ปุ่น',15.8773,108.3263,'Japanese Covered Bridge Hoi An','en','สะพานไม้หลังคาที่เป็นสัญลักษณ์ของฮอยอัน สร้างโดยชุมชนพ่อค้าญี่ปุ่นในอดีต','สะพานหลังคาไม้','30 นาที','เดินในเมืองเก่า','ไปเช้า คนน้อยกว่า'],
+['Tra Que Vegetable Village','หมู่บ้านผักตราเกว',15.8997,108.3307,'Tra Que Vegetable Village','en','หมู่บ้านปลูกผักสมุนไพรที่เปิดให้ปั่นจักรยานและเรียนทำอาหารแบบพื้นบ้าน','ผักสมุนไพรและคลาสทำอาหาร','2–3 ชม.','ปั่นจักรยานหรือรถจากเมืองเก่า ~15 นาที','จองคลาสล่วงหน้า'],
+['An Bang Beach','หาดอานบ่าง',15.9062,108.3586,'An Bang Beach','en','ชายหาดเงียบใกล้ฮอยอัน มีร้านอาหารและเก้าอี้ริมทราย','ชายหาดสบาย ๆ','2–3 ชม.','จักรยานหรือรถ ~15–20 นาที','ไปบ่ายแก่ แดดอ่อน'],
+['My Son Sanctuary','ปราสาทหมีเซิน',15.7640,108.1245,'My Son Sanctuary','en','กลุ่มปราสาทของอาณาจักรจามปาในหุบเขา ขึ้นทะเบียนมรดกโลก','ปราสาทจามโบราณ','2–3 ชม.','ขับจากฮอยอัน ~1 ชม.','ไปเช้าก่อนร้อนและคนมาก']],
+taipei:[
+['Longshan Temple','วัดหลงซาน',25.0372,121.4999,'Longshan Temple Taipei','en','วัดเก่าแก่ใจกลางเมืองที่ชาวไทเปมาสักการะต่อเนื่องทั้งวัน','วัดเก่าและควันธูป','1 ชม.','MRT สถานีหลงซาน','เงียบและสุภาพในพื้นที่สักการะ'],
+['Elephant Mountain','เขาช้าง',25.0275,121.5708,'Elephant Mountain Taipei','en','เส้นทางเดินขึ้นเขาสั้น ๆ มองเห็นไทเป 101 และตัวเมือง','วิวไทเป 101','1.5–2 ชม.','MRT สถานี Xiangshan','ไปเช้าหรือเย็น พกน้ำ'],
+['Taipei 101','ไทเป 101',25.0339,121.5645,'Taipei 101','en','ตึกสูงเป็นสัญลักษณ์ของเมือง มีจุดชมวิวและย่านเดินเล่นรอบ ๆ','ตึกสูงกลางเมือง','1.5–2 ชม.','MRT สถานี Taipei 101/World Trade Center','ซื้อตั๋วล่วงหน้าออนไลน์'],
+['Shilin Night Market','ตลาดซื่อหลิน',25.0880,121.5240,'Shilin Night Market','en','ตลาดกลางคืนดังที่เต็มไปด้วยอาหารริมทางและร้านเล่นเกม','อาหารริมทาง','2 ชม.','MRT สถานี Jiantan','ไปหลังมืด เตรียมเงินสด'],
+['Jiufen Old Street','ถนนเก่าจิ่วเฟิ่น',25.1096,121.8449,'Jiufen','en','เมืองบนเนินเขาริมทะเล ถนนแคบและร้านชากับบันไดหิน','ถนนเก่าบนเนินเขา','3 ชม.','รถบัสจากไทเป ~1–1.5 ชม.','ไปเช้า เลี่ยงช่วงสายถึงบ่ายที่คนแน่น']]
 };
 const wc={};
 function wq(q,lg){const k=lg+'|'+q;return wc[k]||(wc[k]=fetch(`https://${lg}.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrlimit=3&prop=pageimages|coordinates&piprop=thumbnail&pithumbsize=1200&format=json&origin=*`).then(r=>r.json()).then(j=>Object.values((j.query||{}).pages||{}).sort((a,b)=>a.index-b.index)).catch(()=>[]))}
 function km(a,b,c,d){const r=Math.PI/180;return Math.hypot((c-a)*r,(d-b)*r*Math.cos(a*r))*6371}
-async function findPlace(p){
+async function findPlace(p,used){
  const [en,,lat,lng,q,lg]=p;let img=null,co=null;
  if(!q)return{};
  for(const [l,qq] of [[lg,q],[lg==='th'?'en':'th',en]]){
   const pg=await wq(qq,l);
-  if(!img){const g=pg.find(x=>x.thumbnail);if(g)img=g.thumbnail.source}
+  if(!img){const g=pg.find(x=>x.thumbnail&&!used.has(x.thumbnail.source));if(g){img=g.thumbnail.source;used.add(img)}}
   if(!co){const g=pg.find(x=>x.coordinates&&km(lat,lng,x.coordinates[0].lat,x.coordinates[0].lon)<25);if(g)co=[g.coordinates[0].lat,g.coordinates[0].lon]}
   if(img&&co)break;
  }
@@ -682,20 +826,27 @@ function initTripExtras(t){
  const pl=PL[t.id]||[];
  if(tripMap){tripMap.remove();tripMap=null}
  tripMap=L.map('tripMap',{scrollWheelZoom:false}).setView(pl[0]?[pl[0][2],pl[0][3]]:[13,100],9);
- L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(tripMap);
+ addBase(tripMap);
  const mk=pl.map((p,i)=>L.marker([p[2],p[3]],{icon:L.divIcon({className:'',html:`<div class="stop-marker">${i+1}</div>`,iconSize:[26,26],iconAnchor:[13,13]})}).addTo(tripMap).bindPopup(`<b>${i+1}. ${p[0]} · ${p[1]}</b>`));
  const fit=()=>tripMap.fitBounds(L.latLngBounds(pl.map((p,i)=>mk[i].getLatLng())),{padding:[40,40],maxZoom:13});
  if(pl.length)fit();
- let heroSet=false;
- pl.forEach((p,i)=>findPlace(p).then(({img,co})=>{
-  if(co){mk[i].setLatLng(co);fit()}
-  if(img){
+ const used=new Set(),tok=t.id;
+ (async()=>{
+  for(let i=0;i<pl.length;i++){
+   if(!tripMap||panelEl.hidden)return;
+   const {img,co}=await findPlace(pl[i],used);
+   if(co){mk[i].setLatLng(co);fit()}
    const ph=document.getElementById('ph'+i);
-   if(ph)ph.outerHTML=`<img src="${img}" alt="${p[0]}" loading="lazy">`;
-   const h=document.getElementById('tripHero');
-   if(h&&!heroSet){heroSet=true;h.innerHTML=`<img class="hero-photo" src="${img}" alt="${p[0]}">`}
+   if(ph&&img)ph.outerHTML=`<img src="${img}" alt="${pl[i][0]}" loading="lazy">`;
   }
- }));
+  const h=document.getElementById('tripHero');
+  if(h){
+   const pg=await wq(t.q,t.q.charCodeAt(0)>127?'th':'en');
+   const g=pg.find(x=>x.thumbnail&&!used.has(x.thumbnail.source));
+   if(g)h.innerHTML=`<img class="hero-photo" src="${g.thumbnail.source}" alt="${t.tab.en}">`;
+   else h.style.display='none';
+  }
+ })();
  const key='btq-cl-'+t.id,saved=JSON.parse(localStorage.getItem(key)||'[]'),box=document.getElementById('tripStamps');
  box.innerHTML=pl.map((p,i)=>`<button class="stamp ${saved.includes(i)?'on':''}" data-id="${i}" aria-label="Mark ${p[0]} as visited">${i+1}</button>`).join('');
  const upd=()=>{const on=[...box.querySelectorAll('.stamp.on')];document.getElementById('tripCount').textContent=`${on.length} / ${pl.length}`;document.getElementById('tripFill').style.width=`${on.length/pl.length*100}%`;localStorage.setItem(key,JSON.stringify(on.map(x=>+x.dataset.id)))};
@@ -709,27 +860,53 @@ function tripHTML(t){
  const pl=PL[t.id]||[];
  const spreads=pl.map((p,i)=>`<article class="spread ${i%2?'flip':''}"><div class="img-col"><div class="ph" id="ph${i}">${p[0]}</div></div><div class="txt-col"><p class="num">${String(i+1).padStart(2,'0')} / ${String(pl.length).padStart(2,'0')}</p><h3>${p[0]}</h3><p class="thai-name thai">${p[1]}</p><p class="hist thai">${p[6]}</p><div class="facts thai"><div class="fact"><b>${bi({en:'FAMOUS FOR',th:'จุดเด่น'})}</b><span>${p[7]}</span></div><div class="fact"><b>${bi({en:'VISIT',th:'เวลาที่ใช้'})}</b><span>${p[8]}</span></div><div class="fact"><b>${bi({en:'GET THERE',th:'การเดินทาง'})}</b><span>${p[9]}</span></div><div class="fact"><b>${bi({en:'TIP',th:'เคล็ดลับ'})}</b><span>${p[10]}</span></div></div><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p[0]+' '+t.q)}" target="_blank" rel="noopener" class="underline-hover mono text-xs tracking-widest uppercase inline-block mt-6">${bi({en:'Open in Google Maps ↗',th:'เปิดใน Google Maps ↗'})}</a></div></article>`).join('');
  const tips=t.tips.map(([a,b],i)=>`<div class="note"><span class="num">${String(i+1).padStart(2,'0')}</span><div><h4>${T(a)}</h4><p>${T(b)}</p></div></div>`).join('');
- return `<section class="pt-40 pb-16"><div class="container">
+ return `<section id="tripTop" class="trip-sec pt-40 pb-16"><div class="container">
  <p class="eyebrow">${bi(t.tag)}</p>
  <h1 class="hl-1 disp mt-6">${bi(t.title)}</h1>
  <div class="flex flex-wrap gap-y-4 mt-10">${st}</div>
  <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.q)}" target="_blank" rel="noopener" class="underline-hover mono text-xs tracking-widest uppercase inline-block mt-8">${bi({en:'Open in Google Maps ↗',th:'เปิดใน Google Maps ↗'})}</a>
  </div><div id="tripHero" class="trip-hero mt-12"></div></section>
- <section class="section pt-0"><div class="container"><p class="eyebrow">${bi({en:'The Itinerary',th:'แผนการเดินทาง'})}</p>${days}</div></section>
- <section class="section pt-0"><div class="container"><p class="eyebrow">${bi({en:'Get There',th:'การเดินทาง'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Follow the Line',th:'ตามเส้นทาง'})}</h2><div class="map-frame mt-10"><div id="tripMap"></div></div><p class="mono text-[11px] text-[var(--stone)] mt-3">${bi({en:'Pins are approximate — use Google Maps links below for exact locations.',th:'ตำแหน่งบนแผนที่เป็นค่าประมาณ ใช้ลิงก์ Google Maps ในแต่ละสถานที่เพื่อความแม่นยำ'})}</p></div></section>
- <section class="section pt-0"><div class="container"><p class="eyebrow">${bi({en:'The Places',th:'สถานที่'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Where You\'ll Go',th:'ที่ที่เราจะไป'})}</h2><div class="mt-6">${spreads}</div></div></section>
- <section class="section pt-0"><div class="container"><p class="eyebrow">${bi({en:'Before You Go',th:'ก่อนออกเดินทาง'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Field Notes',th:'บันทึกภาคสนาม'})}</h2><div class="notes mt-10 grid md:grid-cols-3 md:gap-x-10">${tips}</div>
+ <section id="tripSchedule" class="trip-sec section pt-0"><div class="container"><p class="eyebrow">${bi({en:'The Itinerary',th:'แผนการเดินทาง'})}</p>${days}</div></section>
+ <section id="tripMapSec" class="trip-sec section pt-0"><div class="container"><p class="eyebrow">${bi({en:'Get There',th:'การเดินทาง'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Follow the Line',th:'ตามเส้นทาง'})}</h2><div class="map-frame mt-10"><div id="tripMap"></div></div><p class="mono text-[11px] text-[var(--stone)] mt-3">${bi({en:'Pins are approximate — use Google Maps links below for exact locations.',th:'ตำแหน่งบนแผนที่เป็นค่าประมาณ ใช้ลิงก์ Google Maps ในแต่ละสถานที่เพื่อความแม่นยำ'})}</p></div></section>
+ <section id="tripPlaces" class="trip-sec section pt-0"><div class="container"><p class="eyebrow">${bi({en:'The Places',th:'สถานที่'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Where You\'ll Go',th:'ที่ที่เราจะไป'})}</h2><div class="mt-6">${spreads}</div></div></section>
+ <section id="tripGuide" class="trip-sec section pt-0"><div class="container"><p class="eyebrow">${bi({en:'Before You Go',th:'ก่อนออกเดินทาง'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Field Notes',th:'บันทึกภาคสนาม'})}</h2><div class="notes mt-10 grid md:grid-cols-3 md:gap-x-10">${tips}</div>
  <p class="mono text-[11px] text-[var(--stone)] mt-8 max-w-xl">${bi({en:'Times and budgets are estimates — confirm prices, opening hours and bookings before you go.',th:'เวลาและงบเป็นค่าประมาณ ตรวจสอบราคา เวลาเปิด และการจองอีกครั้งก่อนเดินทาง'})}</p></div></section>
- <section class="section pt-0"><div class="container"><p class="eyebrow">${bi({en:'Track Your Trip',th:'ติดตามทริป'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Place Checklist',th:'เช็คลิสต์สถานที่'})}</h2><div id="tripStamps" class="flex flex-wrap gap-4 mt-10"></div><div class="flex items-center gap-4 mt-8 max-w-sm"><p id="tripCount" class="mono text-sm"></p><div class="progress-track"><div id="tripFill" class="progress-fill"></div></div></div></div></section>`;
+ <section id="tripCheck" class="trip-sec section pt-0"><div class="container"><p class="eyebrow">${bi({en:'Track Your Trip',th:'ติดตามทริป'})}</p><h2 class="hl-2 disp mt-4">${bi({en:'Place Checklist',th:'เช็คลิสต์สถานที่'})}</h2><div id="tripStamps" class="flex flex-wrap gap-4 mt-10"></div><div class="flex items-center gap-4 mt-8 max-w-sm"><p id="tripCount" class="mono text-sm"></p><div class="progress-track"><div id="tripFill" class="progress-fill"></div></div></div></div></section>`;
 }
-const tabsEl=document.getElementById('tabs'),bkkEl=document.getElementById('trip-bkk'),panelEl=document.getElementById('trip-x'),bkkLinks=document.getElementById('bkkLinks');
-tabsEl.innerHTML=`<button class="tab on" data-id="bkk">${bi({en:'Bangkok Temples',th:'วัดกรุงเทพฯ'})}</button>`+trips.map(t=>`<button class="tab" data-id="${t.id}">${bi(t.tab)}</button>`).join('');
+const DIST={ayutthaya:75,nakhon:90,saraburi:100,kanchanaburi:112,sattahip:127,chanthaburi:215,sukhothai:370,chiangkhan:478,phuquoc:545,nan:560,khaosok:580,chiangmai:584,luangprabang:705,hoian:860,penang:925,bhutan:1940,nepal:2250,taipei:2500,bali:2960,seoul:3700,kyoto:4300,japan:4600};
+trips.sort((a,b)=>(DIST[a.id]||1e5)-(DIST[b.id]||1e5));
+const tabsEl=document.getElementById('tabs'),bkkEl=document.getElementById('trip-bkk'),panelEl=document.getElementById('trip-x'),bkkLinks=document.getElementById('bkkLinks'),tripLinks=document.getElementById('tripLinks');
+tabsEl.innerHTML=`<button class="tab on" data-id="bkk" data-label="Bangkok">${bi({en:'Bangkok Temples',th:'วัดกรุงเทพฯ'})}</button>`+trips.map(t=>`<button class="tab" data-id="${t.id}" data-label="${t.tab.en}">${bi(t.tab)}</button>`).join('');
+const CLOSE={
+nakhon:[['Get wet. Get muddy.<br>Get free.','เปียกได้ เลอะได้<br>แล้วใจก็เป็นอิสระ']],
+sattahip:[['Salt on your skin.<br>Nothing on your mind.','เกลือบนผิว<br>ไม่มีอะไรในหัว']],
+saraburi:[['Warm grill, cold stream,<br>a quiet mind.','เตาร้อน ธารเย็น<br>ใจสงบ']],
+khaosok:[['The jungle never hurries.<br>Neither should you.','ป่าไม่เคยรีบ<br>เราก็ไม่ต้องรีบ']],
+chiangmai:[['Climb slowly.<br>The view will wait.','ค่อย ๆ ขึ้นไป<br>วิวรอเราอยู่เสมอ']],
+phuquoc:[['Follow the sunset<br>to the island\'s edge.','ตามตะวันไป<br>จนสุดขอบเกาะ']],
+nan:[['Some places ask you<br>to arrive slowly.','บางที่ขอให้เรา<br>มาถึงอย่างช้า ๆ']],
+kanchanaburi:[['Remember the bridge.<br>Then follow the river.','จดจำสะพานไว้<br>แล้วตามสายน้ำไป']],
+ayutthaya:[['The old stones remember.<br>Walk gently.','ก้อนอิฐเก่ายังจำได้<br>เดินเบา ๆ']],
+luangprabang:[['Rise before the city.<br>Walk like the river.','ตื่นก่อนเมือง<br>เดินช้าเหมือนสายน้ำ']],
+hoian:[['Light a lantern.<br>Let the evening slow down.','จุดโคมไฟสักดวง<br>ให้ค่ำคืนช้าลง']],
+taipei:[['Climb a little.<br>Eat a lot.','ปีนสูงอีกนิด<br>กินให้อิ่ม']],
+japan:[['Neon and temple bells.<br>Find your own pace.','แสงนีออนกับเสียงระฆังวัด<br>หาจังหวะของตัวเอง']]
+};
+const footE=document.getElementById('footEyebrow'),footC=document.getElementById('footClose'),footDef=[footE.innerHTML,footC.innerHTML];
+function setClose(id){
+ const q=CLOSE[id];
+ if(!q){footE.innerHTML=footDef[0];footC.innerHTML=footDef[1];return}
+ const [en,th]=q[0],flat=x=>x.replace(/<br>/g,' ');
+ footE.innerHTML=`<span data-en>${flat(th)}</span><span data-th>${flat(en)}</span>`;
+ footC.innerHTML=`<span data-en>${en}</span><span data-th class="thai">${th}</span>`;
+}
 function showTrip(id,push){
  const t=trips.find(x=>x.id===id);
  tabsEl.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.id===(t?id:'bkk')));
- bkkEl.hidden=!!t;panelEl.hidden=!t;bkkLinks.style.display=t?'none':'';
+ bkkEl.hidden=!!t;panelEl.hidden=!t;bkkLinks.style.display=t?'none':'';tripLinks.style.display=t?'':'none';
  if(t){panelEl.innerHTML=tripHTML(t);initTripExtras(t);document.title=`${t.tab.en} — ${t.title.en}`}
- else{document.title='Seven Temples, One Day — Bangkok Temple Quest';map.invalidateSize()}
+ else{document.title='Travel Slowly — Field Notes for Curious Places';map.invalidateSize()}
+ setClose(t?id:null);
  if(push)history.replaceState(null,'',t?'#t-'+id:location.pathname);
  scrollTo(0,0);
 }
