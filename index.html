@@ -149,8 +149,8 @@ html.lang-th [data-th]{display:inline}
 
 <nav class="nav">
   <div class="container flex items-center justify-between py-4">
-    <a href="#home" class="disp font-semibold text-sm tracking-tight">Travel Slowly <span class="mono text-[var(--ember)] text-xs align-top">'26</span></a>
-    <div id="bkkLinks" class="hidden md:flex items-center gap-8">
+    <a id="logoLink" href="#home" class="disp font-semibold text-sm tracking-tight">Travel Slowly <span class="mono text-[var(--ember)] text-xs align-top">'26</span></a>
+    <div id="bkkLinks" class="hidden md:flex items-center gap-8" style="display:none">
       <a href="#route" class="underline-hover"><span data-en>Route</span><span data-th>เส้นทาง</span></a>
       <a href="#map-section" class="underline-hover"><span data-en>Map</span><span data-th>แผนที่</span></a>
       <a href="#schedule" class="underline-hover"><span data-en>Schedule</span><span data-th>กำหนดการ</span></a>
@@ -165,14 +165,32 @@ html.lang-th [data-th]{display:inline}
 </nav>
 
 <main id="main">
-<div id="trip-bkk">
-
+<div id="trip-home">
 <section id="home" class="pt-40 pb-0">
   <div class="container">
-    <p class="eyebrow reveal"><span data-en>Sat · 05 Sep 2026 · Bangkok, Thailand</span><span data-th>เสาร์ · 5 ก.ย. 2569 · กรุงเทพฯ ประเทศไทย</span></p>
+    <p class="eyebrow reveal"><span data-en>Field notes · Thailand and beyond</span><span data-th>บันทึกภาคสนาม · ไทยและไกลออกไป</span></p>
 <h1 class="hl-1 disp mt-6 reveal"><span data-en>Places Worth<br>Slowing Down For.</span><span data-th class="thai">สถานที่ที่ควรค่า<br>แก่การเดินทางช้า ๆ</span></h1>
     <p class="thai text-[var(--stone)] text-base md:text-lg mt-4 reveal"><span data-en>วัด เมือง ป่า น้ำตก และทางเล็ก ๆ — เดินทางอย่างตั้งใจ</span><span data-th>Temples, towns, trails and small roads — travel with intention</span></p>
     <p class="mt-6 max-w-lg text-[15px] leading-relaxed text-[var(--ink)]/80 reveal"><span data-en>Self-guided journeys through places with a story — temples, towns, trails and local corners. No rush, no checklist pressure, just a considered route and room to notice what is usually missed.</span><span data-th class="thai">บันทึกการเดินทางด้วยตัวเองผ่านสถานที่ที่มีเรื่องราว — วัด เมือง เส้นทางธรรมชาติ และมุมท้องถิ่น ไม่ต้องรีบ ไม่ต้องทำตามเช็คลิสต์ เพียงเส้นทางที่คิดมาอย่างดี และเวลาสำหรับสังเกตสิ่งที่มักถูกมองข้าม</span></p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <p class="eyebrow"><span data-en>The Journeys</span><span data-th>ทริปทั้งหมด</span></p>
+    <h2 class="hl-2 disp mt-4"><span data-en>Near to far.</span><span data-th class="thai">จากใกล้ไปไกล</span></h2>
+    <p class="mono text-[11px] text-[var(--stone)] mt-3"><span data-en>Distances are approximate straight-line from Bangkok.</span><span data-th>ระยะทางเป็นค่าประมาณแบบเส้นตรงจากกรุงเทพฯ</span></p>
+    <div id="destList" class="mt-10"></div>
+  </div>
+</section>
+</div>
+<div id="trip-bkk" hidden>
+
+<section id="bkkTop" class="pt-40 pb-0">
+  <div class="container">
+    <p class="eyebrow reveal"><span data-en>Sat · 05 Sep 2026 · Bangkok, Thailand</span><span data-th>เสาร์ · 5 ก.ย. 2569 · กรุงเทพฯ ประเทศไทย</span></p>
+<h1 class="hl-1 disp mt-6 reveal"><span data-en>Seven Temples,<br>One Day.</span><span data-th class="thai">เจ็ดวัด<br>ในหนึ่งวัน</span></h1>
+    <p class="thai text-[var(--stone)] text-base md:text-lg mt-4 reveal"><span data-en>ไหว้พระเจ็ดวัด เดินเท้าและล่องเรือ — เดินทางอย่างตั้งใจ</span><span data-th>Seven temples on foot and by boat — travel with intention</span></p>
+    <p class="mt-6 max-w-lg text-[15px] leading-relaxed text-[var(--ink)]/80 reveal"><span data-en>A self-guided day through seven of Bangkok’s most storied temples. Start early, cross the river by ferry, and leave room to notice what is usually missed.</span><span data-th class="thai">หนึ่งวันเดินทางด้วยตัวเองผ่านเจ็ดวัดสำคัญของกรุงเทพฯ เริ่มต้นแต่เช้า ข้ามแม่น้ำด้วยเรือ และเหลือเวลาให้สังเกตสิ่งที่มักมองข้าม</span></p>
     <div class="flex gap-8 mt-8 reveal">
       <a href="#route" class="underline-hover mono text-xs tracking-widest uppercase"><span data-en>The Route ↓</span><span data-th class="thai" style="text-transform:none">ดูเส้นทาง ↓</span></a>
       <a href="#map-section" class="underline-hover mono text-xs tracking-widest uppercase"><span data-en>The Map ↗</span><span data-th class="thai" style="text-transform:none">ดูแผนที่ ↗</span></a>
@@ -876,8 +894,14 @@ function tripHTML(t){
 const DIST={ayutthaya:75,nakhon:90,saraburi:100,kanchanaburi:112,sattahip:127,chanthaburi:215,sukhothai:370,chiangkhan:478,phuquoc:545,nan:560,khaosok:580,chiangmai:584,luangprabang:705,hoian:860,penang:925,bhutan:1940,nepal:2250,taipei:2500,bali:2960,seoul:3700,kyoto:4300,japan:4600};
 trips.sort((a,b)=>(DIST[a.id]||1e5)-(DIST[b.id]||1e5));
 const tabsEl=document.getElementById('tabs'),bkkEl=document.getElementById('trip-bkk'),panelEl=document.getElementById('trip-x'),bkkLinks=document.getElementById('bkkLinks'),tripLinks=document.getElementById('tripLinks');
-tabsEl.innerHTML=`<button class="tab on" data-id="bkk" data-label="Bangkok">${bi({en:'Bangkok Temples',th:'วัดกรุงเทพฯ'})}</button>`+trips.map(t=>`<button class="tab" data-id="${t.id}" data-label="${t.tab.en}">${bi(t.tab)}</button>`).join('');
+tabsEl.innerHTML=`<button class="tab on" data-id="home" data-label="Home">${bi({en:'Home',th:'หน้าแรก'})}</button><button class="tab" data-id="bkk" data-label="Bangkok">${bi({en:'Bangkok Temples',th:'วัดกรุงเทพฯ'})}</button>`+trips.map(t=>`<button class="tab" data-id="${t.id}" data-label="${t.tab.en}">${bi(t.tab)}</button>`).join('');
+const homeEl=document.getElementById('trip-home'),destList=document.getElementById('destList');
+const rows=[{id:'bkk',tab:{en:'Bangkok Temples',th:'วัดกรุงเทพฯ'},title:{en:'Seven Temples, One Day',th:'เจ็ดวัดในหนึ่งวัน'},tag:{en:'1 day · on foot and by boat',th:'1 วัน · เดินเท้าและล่องเรือ'},d:0}].concat(trips.map(t=>({id:t.id,tab:t.tab,title:t.title,tag:t.tag,d:DIST[t.id]})));
+destList.innerHTML=rows.map((r,i)=>`<a href="#t-${r.id}" data-go="${r.id}" class="route-row"><span class="idx">${String(i+1).padStart(2,'0')}</span><div><div class="name">${bi(r.tab)}</div><div class="thai-sub">${bi(r.title)} · ${bi(r.tag)}</div></div><span class="time">${r.d?'~'+r.d+' km':bi({en:'In the city',th:'ในกรุงเทพฯ'})}</span><span class="arrow">→</span></a>`).join('');
+destList.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(a){e.preventDefault();showTrip(a.dataset.go,true)}});
+document.getElementById('logoLink').addEventListener('click',e=>{e.preventDefault();showTrip('home',true)});
 const CLOSE={
+bkk:[['Begin with stillness.<br>Let the city glitter later.','เริ่มด้วยความสงบ<br>แล้วค่อยให้เมืองเปล่งประกาย']],
 nakhon:[['Get wet. Get muddy.<br>Get free.','เปียกได้ เลอะได้<br>แล้วใจก็เป็นอิสระ']],
 sattahip:[['Salt on your skin.<br>Nothing on your mind.','เกลือบนผิว<br>ไม่มีอะไรในหัว']],
 saraburi:[['Warm grill, cold stream,<br>a quiet mind.','เตาร้อน ธารเย็น<br>ใจสงบ']],
@@ -901,13 +925,15 @@ function setClose(id){
  footC.innerHTML=`<span data-en>${en}</span><span data-th class="thai">${th}</span>`;
 }
 function showTrip(id,push){
- const t=trips.find(x=>x.id===id);
- tabsEl.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.id===(t?id:'bkk')));
- bkkEl.hidden=!!t;panelEl.hidden=!t;bkkLinks.style.display=t?'none':'';tripLinks.style.display=t?'':'none';
+ const t=trips.find(x=>x.id===id),v=t?id:(id==='bkk'?'bkk':'home');
+ tabsEl.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.id===v));
+ homeEl.hidden=v!=='home';bkkEl.hidden=v!=='bkk';panelEl.hidden=!t;
+ bkkLinks.style.display=v==='bkk'?'':'none';tripLinks.style.display=t?'':'none';
  if(t){panelEl.innerHTML=tripHTML(t);initTripExtras(t);document.title=`${t.tab.en} — ${t.title.en}`}
- else{document.title='Travel Slowly — Field Notes for Curious Places';map.invalidateSize()}
- setClose(t?id:null);
- if(push)history.replaceState(null,'',t?'#t-'+id:location.pathname);
+ else if(v==='bkk'){document.title='Bangkok Temples — Travel Slowly';map.invalidateSize()}
+ else{document.title='Travel Slowly — Field Notes for Curious Places'}
+ setClose(v==='home'?null:v);
+ if(push)history.replaceState(null,'',v==='home'?location.pathname:'#t-'+v);
  scrollTo(0,0);
 }
 tabsEl.addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)showTrip(b.dataset.id,true)});
